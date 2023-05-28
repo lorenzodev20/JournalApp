@@ -7,11 +7,12 @@
         <span class="mx-2 fs-4 fw-light"> {{ yearDay}} </span>
       </div>
       <div>
+        <input type="file" @change="onSelectedImage" ref="imageSelector" v-show="false" accept="image/*">
         <button class="btn btn-danger mx-2" v-if="entry.id" @click="onDeleteEntry">
           Borrar
           <i class="fa fa-trash-alt"></i>
         </button>
-        <button class="btn btn-primary mx-2">
+        <button class="btn btn-primary mx-2" @click="onSelectImage">
           Subir foto
           <i class="fa fa-upload"></i>
         </button>
@@ -22,7 +23,14 @@
       <textarea v-model="entry.text" placeholder="¿Que sucedio hoy?"></textarea>
     </div>
     <img
-    src="https://us.123rf.com/450wm/aleksandarnako/aleksandarnako2104/aleksandarnako210400769/167454186-primavera-de-%C3%A1rbol-en-la-ilustraci%C3%B3n-de-la-puesta-de-sol-del-prado-representaci%C3%B3n-3d.jpg?ver=6"
+    v-if="entry.picture && !localImage"
+    :src="entry.picture"
+    alt="entry-picture"
+    class="img-thumbnail"
+    />
+    <img
+    v-if="localImage"
+    :src="localImage"
     alt="entry-picture"
     class="img-thumbnail"
     />
@@ -35,6 +43,7 @@ import Swal from 'sweetalert2'
 import { defineAsyncComponent } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import getDayMonthYear from '../helpers/getDayMonthYear'
+import uploadImage from '../helpers/uploadImage'
 
 export default {
   props: {
@@ -48,7 +57,9 @@ export default {
   },
   data () {
     return {
-      entry: null
+      entry: null,
+      localImage: null,
+      file: null
     }
   },
   methods: {
@@ -73,15 +84,21 @@ export default {
         allowOutsideClick: false
       })
       Swal.showLoading()
+      let message = 'Entrada registrada con exito'
+
+      const picture = await uploadImage( this.file )
+
+      this.entry.picture = picture
 
       if( this.entry.id){
+        message = 'Entrada actualizada con exito'
         await this.updateEntry(this.entry)
       }else{
         const id = await this.createEntry(this.entry)
         this.$router.push({name:'entry', params:{ id }})
       }
-
-      Swal.fire('Guardando','Entrada registrada con exito','success')
+      this.file = null
+      Swal.fire('Guardado',message,'success')
     },
     async onDeleteEntry(){
       const { isConfirmed } = await Swal.fire({
@@ -105,6 +122,21 @@ export default {
         this.$router.push({name:'no-entry'})
         Swal.fire('Eliminado','','success')
       }
+    },
+    onSelectedImage( event ){
+      const file = event.target.files[0]
+      if(!file){
+        this.localImage = null
+        this.file = null
+        return
+      }
+      this.file = file
+      const fr = new FileReader()
+      fr.onload = () =>  this.localImage = fr.result
+      fr.readAsDataURL( file )
+    },
+    onSelectImage(){
+      this.$refs.imageSelector.click()
     }
   },
   computed: {
