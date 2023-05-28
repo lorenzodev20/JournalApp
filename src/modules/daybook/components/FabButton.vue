@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-primary">
+  <button class="btn btn-primary" @click="emitPadre">
     <i 
     class="fa fa-x3"
     :class="icon"
@@ -13,6 +13,11 @@ export default {
     icon:{
       type: String,
       default: 'fa-plus'
+    }
+  },
+  methods:{
+    emitPadre(){
+      this.$emit('on:click')
     }
   }
 }
