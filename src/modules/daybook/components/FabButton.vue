@@ -1,7 +1,6 @@
 <template>
   <button class="btn btn-primary" @click="emitPadre">
-    <i 
-    class="fa fa-x3"
+    <i class="fa fa-x3"
     :class="icon"
     ></i>
   </button>
