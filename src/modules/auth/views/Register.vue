@@ -1,5 +1,5 @@
 <template>
-  <span class="login100-form-title p-b-41"> Ingresar </span>
+  <span class="login100-form-title p-b-41"> Registro </span>
   <form
     class="login100-form validate-form p-b-33 p-t-5"
     @submit.prevent="onSubmit"
@@ -52,9 +52,12 @@
 
 <script>
 import { ref } from 'vue'
+import { useRouter } from "vue-router";
 import useAuth from '../composables/useAuth'
+import Swal from 'sweetalert2'
 export default {
   setup () {
+    const router = useRouter()
     const { createUser } = useAuth()
     const userForm = ref({
       name: 'User de prueba',
@@ -66,7 +69,11 @@ export default {
       userForm,
       onSubmit: async () => {
         const { ok, message} = await createUser(userForm.value)
-        console.log(ok, message)
+        if(!ok){
+          Swal.fire('Error', message, 'error')
+        }else{
+          router.push({name:'no-entry'})
+        }
       }
     }
   }
