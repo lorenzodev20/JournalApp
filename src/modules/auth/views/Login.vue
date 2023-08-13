@@ -58,11 +58,12 @@ export default {
         if (!ok) {
           Swal.fire('Error', message, 'error')
         } else {
-          Swal.fire('Enhorabuena','Inicio de sesión correcto!','success').then(result => {
-            if (result.isConfirmed) {
-              router.push({ name: 'no-entry' })
-            }
-          })
+          // Swal.fire('Enhorabuena','Inicio de sesión correcto!','success').then(result => {
+          //   if (result.isConfirmed) {
+          //     router.push({ name: 'no-entry' })
+          //   }
+          // })
+          router.push({ name: 'no-entry' })
         }
       }
     }
