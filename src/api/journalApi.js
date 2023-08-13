@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const urlBackJournalApi = process.env.VUE_APP_BACKEND_JOURNAL_URL
+
 const journalApi = axios.create({
-    baseURL: 'https://vue-journal-db6dc-default-rtdb.firebaseio.com'
+    baseURL: urlBackJournalApi
 })
 
 journalApi.interceptors.request.use( (config) => {

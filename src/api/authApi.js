@@ -1,9 +1,12 @@
 import axios from 'axios'
 
+const identitytoolkitUrl = process.env.VUE_APP_BACKEND_AUTH_URL
+const identitytoolkitKey= process.env.VUE_APP_BACKEND_AUTH_URL_KEY
+
 const authApi = axios.create({
-    baseURL: 'https://identitytoolkit.googleapis.com/v1/accounts',
+    baseURL: identitytoolkitUrl,
     params:{
-        key:'AIzaSyCHLgIaU4oSyFekaXQiYShgcApkbLfn99k'
+        key:identitytoolkitKey
     }
 })
 
