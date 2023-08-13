@@ -1,5 +1,4 @@
 export const loginUser = ( state, { user, idToken, refreshToken }) => {
-    console.log({ user, idToken, refreshToken });
     if (idToken) {
         localStorage.setItem('idToken',idToken)
         state.idToken = idToken
